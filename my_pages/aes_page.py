@@ -64,7 +64,7 @@ def show_aes_page():
     }
     .aes-card:hover {transform: translateY(-8px); box-shadow: 0 14px 32px rgba(0,0,0,0.35);}
     .aes-title {color: #a8c0ff; font-size: 24px; font-weight: 700; margin-bottom: 15px;}
-    .aes-output {
+    .aes-output1 {
         background: rgba(255,255,255,0.05);
         padding: 12px; border-radius: 15px;
         font-family: monospace; color: #fff;
@@ -123,14 +123,14 @@ def show_aes_page():
         if st.button("Encrypt", key="aes_enc_btn", help="Click to encrypt text"):
             try:
                 enc_text = aes_encrypt(txt, key)
-                st.markdown(f'<div class="aes-output">{enc_text}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="aes-output1">{enc_text}</div>', unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     with col2:
         if st.button("Decrypt", key="aes_dec_btn", help="Click to decrypt text"):
             try:
                 dec_text = aes_decrypt(txt, key)
-                st.markdown(f'<div class="aes-output">{dec_text}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="aes-output1">{dec_text}</div>', unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
 
