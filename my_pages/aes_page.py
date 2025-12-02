@@ -116,6 +116,25 @@ def show_aes_page():
     # ---------- Input fields ----------
     txt = st.text_input("Text", key="aes_text")
     key = st.text_input("Key (16 chars)", key="aes_key")
+<<<<<<< HEAD
+
+    # ---------- Buttons ----------
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Encrypt", key="aes_enc_btn", help="Click to encrypt text"):
+            try:
+                enc_text = aes_encrypt(txt, key)
+                st.markdown(f'<div class="aes-output">{enc_text}</div>', unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+    with col2:
+        if st.button("Decrypt", key="aes_dec_btn", help="Click to decrypt text"):
+            try:
+                dec_text = aes_decrypt(txt, key)
+                st.markdown(f'<div class="aes-output">{dec_text}</div>', unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+=======
 
     # ---------- Buttons ----------
     col1, col2 = st.columns(2)
@@ -136,3 +155,4 @@ def show_aes_page():
 
 
 
+>>>>>>> f50c5dcf541335b0287e446f11cae537f07f6a6e

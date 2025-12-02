@@ -1,7 +1,7 @@
 import streamlit as st
 from Crypto.Cipher import AES
 import base64
-##
+
 # ---------------- Helper Functions ----------------
 BLOCK_SIZE = 16  # AES-128
 

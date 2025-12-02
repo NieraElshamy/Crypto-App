@@ -96,9 +96,75 @@ div.row-widget.stRadio > div:hover {
 @keyframes fadeIn {0%{opacity:0; transform:translateY(15px);}100%{opacity:1; transform:translateY(0);}}
 @keyframes popIn {0%{transform:scale(0.95); opacity:0;}100%{transform:scale(1); opacity:1;}}
 @keyframes float {0%{transform:translateY(0px);}50%{transform:translateY(-10px);}100%{transform:translateY(0px);}}
+@keyframes float {0%{transform:translateY(0px);}50%{transform:translateY(-10px);}100%{transform:translateY(0px);}}
 </style>
 """, unsafe_allow_html=True)
 
+# ---------------------- Flashcard Data ----------------------
+FLASHCARDS_DATA = {
+    "main_categories": [
+        {
+            "title": "Classical Ciphers",
+            "description": "",
+            "type": "main_category",
+            "color": "#4a86e8"
+        },
+        {
+            "title": "Modern Encryption",
+            "description": "",
+            "type": "main_category",
+            "color": "#6aa84f"
+        }
+    ],
+    "classical_ciphers": [
+        {
+            "title": "Affine Cipher",
+            "description": "A monoalphabetic substitution cipher using mathematical functions.",
+            "page": "Affine",
+            "icon": ""
+        },
+        {
+            "title": "Vigenère Cipher",
+            "description": "A polyalphabetic substitution cipher using a keyword.",
+            "page": "Vigenère",
+            "icon": ""
+        },
+        {
+            "title": "DNA Encryption",
+            "description": "Encryption based on DNA sequences and biological concepts.",
+            "page": "DNA",
+            "icon": ""
+        },
+        {
+            "title": "Row Transposition",
+            "description": "A transposition cipher that rearranges characters in rows.",
+            "page": "Row Transposition",
+            "icon": ""
+        }
+    ],
+    "modern_encryption": [
+        {
+            "title": "DES Encryption",
+            "description": "Data Encryption Standard - A symmetric-key block cipher.",
+            "page": "DES",
+            "icon": ""
+        },
+        {
+            "title": "AES Encryption",
+            "description": "Advanced Encryption Standard - The most widely used encryption.",
+            "page": "AES",
+            "icon": ""
+        }
+    ],
+    "history": [
+        {
+            "title": "History",
+            "description": "Learn about the evolution of cryptography through time.",
+            "page": "History",
+            "icon": ""
+        }
+    ]
+}
 # ---------------------- Flashcard Data ----------------------
 FLASHCARDS_DATA = {
     "main_categories": [
@@ -175,6 +241,7 @@ with st.sidebar:
 
 # ---------------------- Pages ----------------------
 if page == "Dashboard":
+    # Hero Section
     # Hero Section
     st.markdown("""
     <div class="hero">
