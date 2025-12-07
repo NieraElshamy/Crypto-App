@@ -1,6 +1,6 @@
 # my_pages/aes_page.py
 import streamlit as st
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 import base64
 
 # ---------------- Helper Functions ----------------
@@ -31,6 +31,17 @@ def aes_decrypt(enc, key):
     enc_bytes = base64.b64decode(enc)
     decrypted = cipher.decrypt(enc_bytes)
     return unpad_bytes(decrypted).decode("utf-8")
+
+# ---------------- History Helper ---------------- #
+def add_to_history(algo, action, input_text, output_text):
+    if "history" not in st.session_state:
+        st.session_state["history"] = []
+    st.session_state["history"].append({
+        "algo": algo,       # "AES"
+        "action": action,   # "Encryption" أو "Decryption"
+        "input": input_text,
+        "output": output_text
+    })
 
 # ---------------- AES Page ----------------
 def show_aes_page():
@@ -125,6 +136,7 @@ def show_aes_page():
             try:
                 enc_text = aes_encrypt(txt, key)
                 st.markdown(f'<div class="aes-output">{enc_text}</div>', unsafe_allow_html=True)
+                add_to_history("AES", "Encryption", txt, enc_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     with col2:
@@ -132,5 +144,6 @@ def show_aes_page():
             try:
                 dec_text = aes_decrypt(txt, key)
                 st.markdown(f'<div class="aes-output">{dec_text}</div>', unsafe_allow_html=True)
+                add_to_history("AES", "Decryption", txt, dec_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")

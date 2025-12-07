@@ -1,8 +1,20 @@
 import streamlit as st
 
+# ---------------- Helper / History ---------------- #
 def format_text(s):
     return ''.join([c.upper() for c in s if c.isalpha()])
 
+def add_to_history(algo, action, input_text, output_text):
+    if "history" not in st.session_state:
+        st.session_state["history"] = []
+    st.session_state["history"].append({
+        "algo": algo,       # "Vigenère"
+        "action": action,   # "Encryption" أو "Decryption"
+        "input": input_text,
+        "output": output_text
+    })
+
+# ---------------- Vigenère Cipher ---------------- #
 def vigenere_encrypt(p, key):
     p = format_text(p)
     key = format_text(key)
@@ -21,6 +33,7 @@ def vigenere_decrypt(c, key):
         res += chr((ord(ch) - 65 - shift) % 26 + 65)
     return res
 
+# ---------------- Streamlit Page ---------------- #
 def show_vigenere_page():
     # ---------- Custom CSS ----------
     st.markdown("""
@@ -79,7 +92,6 @@ def show_vigenere_page():
         box-shadow: 0 8px 24px rgba(168,192,255,0.4);
     }
 
-    /* Input fields */
     div.stTextInput>div>input {
         background: rgba(255,255,255,0.05) !important;
         color: #ffffff !important;
@@ -103,29 +115,24 @@ def show_vigenere_page():
     st.markdown('<h1 style="color:#a8c0ff; font-weight:700; margin-bottom:25px;">Vigenère Cipher Encryption / Decryption</h1>', unsafe_allow_html=True)
 
     # ---------- Input fields ----------
-    txt = st.text_input("Text", key="vig_text", 
-                       help="Enter text containing only letters (other characters will be ignored)")
-    key = st.text_input("Key", key="vig_key", 
-                       help="Enter key containing only letters")
+    txt = st.text_input("Text", key="vig_text", help="Enter text containing only letters")
+    key = st.text_input("Key", key="vig_key", help="Enter key containing only letters")
 
     # ---------- Buttons ----------
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Encrypt", key="vig_enc_btn", help="Click to encrypt text"):
+        if st.button("Encrypt", key="vig_enc_btn"):
             try:
                 enc_text = vigenere_encrypt(txt, key)
                 st.markdown(f'<div class="vig-output">Encrypted: {enc_text}</div>', unsafe_allow_html=True)
+                add_to_history("Vigenère", "Encryption", txt, enc_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     with col2:
-        if st.button("Decrypt", key="vig_dec_btn", help="Click to decrypt text"):
+        if st.button("Decrypt", key="vig_dec_btn"):
             try:
                 dec_text = vigenere_decrypt(txt, key)
                 st.markdown(f'<div class="vig-output">Decrypted: {dec_text}</div>', unsafe_allow_html=True)
+                add_to_history("Vigenère", "Decryption", txt, dec_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
-    
-    # ---------- Information Section ----------
-    
-
-    st.markdown('</div>', unsafe_allow_html=True)
