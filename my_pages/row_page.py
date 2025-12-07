@@ -60,6 +60,16 @@ def row_transposition_decrypt(ciphertext, key):
 
     return plaintext
 
+# ---------------- History Helper ---------------- #
+def add_to_history(algo, action, input_text, output_text):
+    if "history" not in st.session_state:
+        st.session_state["history"] = []
+    st.session_state["history"].append({
+        "algo": algo,       # "Row Transposition"
+        "action": action,   # "Encryption" أو "Decryption"
+        "input": input_text,
+        "output": output_text
+    })
 
 # ---------------- Streamlit Page ---------------- #
 def show_row_page():
@@ -156,6 +166,7 @@ def show_row_page():
             try:
                 enc_text = row_transposition_encrypt(txt, key)
                 st.markdown(f'<div class="row-output">Encrypted: {enc_text}</div>', unsafe_allow_html=True)
+                add_to_history("Row Transposition", "Encryption", txt, enc_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     with col2:
@@ -163,6 +174,7 @@ def show_row_page():
             try:
                 dec_text = row_transposition_decrypt(txt, key)
                 st.markdown(f'<div class="row-output">Decrypted: {dec_text}</div>', unsafe_allow_html=True)
+                add_to_history("Row Transposition", "Decryption", txt, dec_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     
