@@ -54,7 +54,11 @@ def show_history_page():
             st.markdown("**Input:**")
             st.text_area(f"Input {idx}", item['input'], height=80, key=f"input_{idx}")
             if st.button(f"Copy Input {idx} 📋", key=f"copy_input_{idx}"):
+
                 st.clipboard(item['input'])
+
+
+                #st.experimental_set_clipboard(item['input'])
 
                 st.success("✅ Input copied to clipboard!")
 

@@ -96,8 +96,6 @@ def show_des_page():
     if result_d:
       st.subheader("Decryption")
       st.code(result_d)
-
-      
     st.markdown("<h3>File Encryption / Decryption</h3>", unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
