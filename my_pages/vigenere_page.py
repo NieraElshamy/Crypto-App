@@ -19,7 +19,7 @@ def add_to_history(algo, action, input_text, output_text):
 # =========================
 def show_vigenere_page():
     #st.title("Vigenère Encryption / Decryption")
-    #st.set_page_config(page_title="🔑 Vigenère Cipher", layout="wide")
+    #st.set_page_config(page_title=" Vigenère Cipher", layout="wide")
     st.markdown("<h1 style='text-align:center; color:#600080;'>Vigenère Cipher Tool</h1>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align:center; color:#cc99ff;'>Encrypt/Decrypt Texts & Files</h4>", unsafe_allow_html=True)
     st.markdown("---")
@@ -89,7 +89,7 @@ def show_vigenere_page():
                     )
                     st.text_area("Decrypted File Preview", plain_file, height=150)
                 except Exception as e:
-                    st.error(f"❌ Failed to decrypt: {e}")
+                    st.error(f" Failed to decrypt: {e}")
 
 # =========================
 # Show Vigenère page
