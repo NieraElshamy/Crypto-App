@@ -1,25 +1,6 @@
+# my_pages/vigenere_page.py
 import streamlit as st
-
-def format_text(s):
-    return ''.join([c.upper() for c in s if c.isalpha()])
-
-def vigenere_encrypt(p, key):
-    p = format_text(p)
-    key = format_text(key)
-    res = ""
-    for i, ch in enumerate(p):
-        shift = ord(key[i % len(key)]) - 65
-        res += chr((ord(ch) - 65 + shift) % 26 + 65)
-    return res
-
-def vigenere_decrypt(c, key):
-    c = format_text(c)
-    key = format_text(key)
-    res = ""
-    for i, ch in enumerate(c):
-        shift = ord(key[i % len(key)]) - 65
-        res += chr((ord(ch) - 65 - shift) % 26 + 65)
-    return res
+from algorithms.vigenere_cipher import vigenere_encrypt, vigenere_decrypt
 
 def show_vigenere_page():
     # ---------- Custom CSS ----------
@@ -41,7 +22,7 @@ def show_vigenere_page():
     .float-circle:nth-child(2){ top: 150px; left: 70%; width: 100px; height: 100px; animation-delay: 3s;}
     @keyframes floatAnim {0% {transform: translateY(0);}50% {transform: translateY(-15px);}100% {transform: translateY(0);}}
 
-    .vig-card {
+    .aes-card {
         background: rgba(255,255,255,0.03);
         backdrop-filter: blur(16px);
         border-radius: 25px;
@@ -51,16 +32,16 @@ def show_vigenere_page():
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
     }
-    .vig-card:hover {transform: translateY(-8px); box-shadow: 0 14px 32px rgba(0,0,0,0.35);}
-    .vig-title {color: #a8c0ff; font-size: 24px; font-weight: 700; margin-bottom: 15px;}
-    .vig-output {
+    .aes-card:hover {transform: translateY(-8px); box-shadow: 0 14px 32px rgba(0,0,0,0.35);}
+    .aes-title {color: #a8c0ff; font-size: 24px; font-weight: 700; margin-bottom: 15px;}
+    .aes-output {
         background: rgba(255,255,255,0.05);
         padding: 12px; border-radius: 15px;
         font-family: monospace; color: #fff;
         margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         word-break: break-all;
     }
-    .vig-btn {
+    .aes-btn {
         background: linear-gradient(90deg, #627daa, #a8c0ff);
         border: none;
         color: white;
@@ -73,7 +54,7 @@ def show_vigenere_page():
         font-size: 18px;
         width: 100%;
     }
-    .vig-btn:hover {
+    .aes-btn:hover {
         background: linear-gradient(90deg, #a8c0ff, #fbc2eb);
         transform: scale(1.05);
         box-shadow: 0 8px 24px rgba(168,192,255,0.4);
@@ -100,32 +81,25 @@ def show_vigenere_page():
     <div class="float-circle"></div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<h1 style="color:#a8c0ff; font-weight:700; margin-bottom:25px;">Vigenère Cipher Encryption / Decryption</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color:#a8c0ff; font-weight:700; margin-bottom:25px;">VIGENER Encryption / Decryption</h1>', unsafe_allow_html=True)
 
     # ---------- Input fields ----------
-    txt = st.text_input("Text", key="vig_text", 
-                       help="Enter text containing only letters (other characters will be ignored)")
-    key = st.text_input("Key", key="vig_key", 
-                       help="Enter key containing only letters")
+    txt = st.text_input("Text", key="aes_text")
+    key = st.text_input("Key (16 chars)", key="aes_key")
 
     # ---------- Buttons ----------
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Encrypt", key="vig_enc_btn", help="Click to encrypt text"):
+        if st.button("Encrypt", key="aes_enc_btn", help="Click to encrypt text"):
             try:
                 enc_text = vigenere_encrypt(txt, key)
-                st.markdown(f'<div class="vig-output">Encrypted: {enc_text}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="aes-output">{enc_text}</div>', unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
     with col2:
-        if st.button("Decrypt", key="vig_dec_btn", help="Click to decrypt text"):
+        if st.button("Decrypt", key="aes_dec_btn", help="Click to decrypt text"):
             try:
                 dec_text = vigenere_decrypt(txt, key)
-                st.markdown(f'<div class="vig-output">Decrypted: {dec_text}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="aes-output">{dec_text}</div>', unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
-    
-    # ---------- Information Section ----------
-    
-
-    st.markdown('</div>', unsafe_allow_html=True)
