@@ -1,63 +1,182 @@
 import streamlit as st
 
 # ---------------- Row Transposition Encryption ---------------- #
-def row_encrypt(msg, key):
-    msg = msg.replace(" ", "")
-    key_order = sorted(list(key))
+def row_transposition_encrypt(plaintext, key):
+    plaintext = plaintext.replace(" ", "")
+    plaintext = plaintext.upper()
 
-    # إنشاء أعمدة لكل حرف في المفتاح
-    columns = {k: "" for k in key_order}
+    key_list = [int(k) for k in str(key)]
+    n_col = len(key_list)
+    n_row = len(plaintext) // n_col
 
-    # التوزيع على الأعمدة
-    for i, ch in enumerate(msg):
-        col_key = key_order[i % len(key)]
-        columns[col_key] += ch
+    if len(plaintext) % n_col != 0:
+        n_row += 1
 
-    # قراءة النص بالأعمدة المرتبة
-    return ''.join(columns[k] for k in key_order)
+    # بناء المصفوفة
+    matrix = [['X' for _ in range(n_col)] for _ in range(n_row)]
+
+    idx = 0
+    for r in range(n_row):
+        for c in range(n_col):
+            if idx < len(plaintext):
+                matrix[r][c] = plaintext[idx]
+                idx += 1
+
+    # ترتيب الأعمدة حسب المفتاح
+    cipher = ""
+    sorted_key = sorted(key_list)
+
+    for num in sorted_key:
+        col = key_list.index(num)
+        for r in range(n_row):
+            cipher += matrix[r][col]
+
+    return cipher
 
 
 # ---------------- Row Transposition Decryption ---------------- #
-def row_decrypt(cipher, key):
-    cipher = cipher.replace(" ", "")
-    key_order = sorted(list(key))
-    col_length = len(cipher) // len(key)
+def row_transposition_decrypt(ciphertext, key):
+    ciphertext = ciphertext.upper()
+    key_list = [int(k) for k in str(key)]
+    n_col = len(key_list)
+    n_row = len(ciphertext) // n_col
 
-    # فصل النص المشفر إلى أعمدة
-    cols = {}
+    matrix = [['' for _ in range(n_col)] for _ in range(n_row)]
+
+    sorted_key = sorted(key_list)
+    col_order = [key_list.index(num) for num in sorted_key]
+
     idx = 0
-    for k in key_order:
-        cols[k] = cipher[idx:idx + col_length]
-        idx += col_length
+    for col_idx in col_order:
+        for row in range(n_row):
+            if idx < len(ciphertext):
+                matrix[row][col_idx] = ciphertext[idx]
+                idx += 1
 
-    # إعادة تجميع النص من الأعمدة
-    result = ""
-    for i in range(col_length):
-        for k in key:
-            result += cols[k][i]
-    return result
+    plaintext = ""
+    for r in range(n_row):
+        for c in range(n_col):
+            plaintext += matrix[r][c]
 
+    return plaintext
+
+# ---------------- History Helper ---------------- #
+def add_to_history(algo, action, input_text, output_text):
+    if "history" not in st.session_state:
+        st.session_state["history"] = []
+    st.session_state["history"].append({
+        "algo": algo,       # "Row Transposition"
+        "action": action,   # "Encryption" أو "Decryption"
+        "input": input_text,
+        "output": output_text
+    })
 
 # ---------------- Streamlit Page ---------------- #
 def show_row_page():
-    st.title("Row Transposition Cipher")
+    # ---------- Custom CSS ----------
+    st.markdown("""
+    <style>
+    body {
+        background: linear-gradient(135deg, #0b0c10, #1c1f2a);
+        color: #e0e0e0;
+        font-family: 'Inter', sans-serif;
+    }
 
-    st.subheader("Encryption")
-    msg = st.text_input("Plaintext", key="row_plain")
-    key = st.text_input("Key", key="row_key1")
+    .float-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(168,192,255,0.08);
+        animation: floatAnim 8s ease-in-out infinite;
+    }
+    .float-circle:nth-child(1){ top: 30px; left: 20%; width: 80px; height: 80px;}
+    .float-circle:nth-child(2){ top: 150px; left: 70%; width: 100px; height: 100px; animation-delay: 3s;}
+    @keyframes floatAnim {0% {transform: translateY(0);}50% {transform: translateY(-15px);}100% {transform: translateY(0);}}
 
-    if st.button("Encrypt", key="row_enc_btn"):
-        if key == "":
-            st.error("Key cannot be empty.")
-        else:
-            st.success(row_encrypt(msg, key))
+    .vig-card {
+        background: rgba(255,255,255,0.03);
+        backdrop-filter: blur(16px);
+        border-radius: 25px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+    }
+    .vig-card:hover {transform: translateY(-8px); box-shadow: 0 14px 32px rgba(0,0,0,0.35);}
+    .vig-title {color: #a8c0ff; font-size: 24px; font-weight: 700; margin-bottom: 15px;}
+    .vig-output {
+        background: rgba(255,255,255,0.05);
+        padding: 12px; border-radius: 15px;
+        font-family: monospace; color: #fff;
+        margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        word-break: break-all;
+    }
+    .vig-btn {
+        background: linear-gradient(90deg, #627daa, #a8c0ff);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 16px 32px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        font-size: 18px;
+        width: 100%;
+    }
+    .vig-btn:hover {
+        background: linear-gradient(90deg, #a8c0ff, #fbc2eb);
+        transform: scale(1.05);
+        box-shadow: 0 8px 24px rgba(168,192,255,0.4);
+    }
 
-    st.subheader("Decryption")
-    msg2 = st.text_input("Ciphertext", key="row_cipher")
-    key2 = st.text_input("Key", key="row_key2")
+    /* Input fields */
+    div.stTextInput>div>input {
+        background: rgba(255,255,255,0.05) !important;
+        color: #ffffff !important;
+        border-radius: 15px;
+        padding: 10px;
+        border: 1px solid rgba(255,255,255,0.2);
+        font-size: 16px;
+    }
+    div.stTextInput>div>input::placeholder {
+        color: #b0b0b0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-    if st.button("Decrypt", key="row_dec_btn"):
-        if key2 == "":
-            st.error("Key cannot be empty.")
-        else:
-            st.success(row_decrypt(msg2, key2))
+    # ---------- Floating Circles ----------
+    st.markdown("""
+    <div class="float-circle"></div>
+    <div class="float-circle"></div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<h1 style="color:#a8c0ff; font-weight:700; margin-bottom:25px;">Row Transposition Cipher Encryption / Decryption</h1>', unsafe_allow_html=True)
+
+    # ---------- Input fields ----------
+    txt = st.text_input("Text", key="vig_text", 
+                       help="Enter text containing only letters (other characters will be ignored)")
+    key = st.text_input("Key", key="vig_key", 
+                       help="Enter key containing only letters")
+
+    # ---------- Buttons ----------
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Encrypt", key="row_enc_btn", help="Click to encrypt text"):
+            try:
+                enc_text = row_transposition_encrypt(txt, key)
+                st.markdown(f'<div class="row-output">Encrypted: {enc_text}</div>', unsafe_allow_html=True)
+                add_to_history("Row Transposition", "Encryption", txt, enc_text)
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+    with col2:
+        if st.button("Decrypt", key="row_dec_btn", help="Click to decrypt text"):
+            try:
+                dec_text = row_transposition_decrypt(txt, key)
+                st.markdown(f'<div class="row-output">Decrypted: {dec_text}</div>', unsafe_allow_html=True)
+                add_to_history("Row Transposition", "Decryption", txt, dec_text)
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+    
+    # ---------- Information Section ----------
+    st.markdown('</div>', unsafe_allow_html=True)

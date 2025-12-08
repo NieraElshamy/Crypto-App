@@ -231,12 +231,17 @@ FLASHCARDS_DATA = {
     ]
 }
 # ---------------------- Sidebar ----------------------
+if 'next_page' in st.session_state:
+    default_page = st.session_state.pop('next_page')
+else:
+    default_page = "Dashboard"
 with st.sidebar:
     st.markdown("<h1>Crypto App</h1>", unsafe_allow_html=True)
     page = st.radio(
         "",
         ["Dashboard", "Affine", "DNA", "Vigenère", "Row Transposition", "DES", "AES", "History"],
-        key="menu"
+        key="menu",
+        index=["Dashboard", "Affine", "DNA", "Vigenère", "Row Transposition", "DES", "AES", "History"].index(default_page)
     )
 
 # ---------------------- Pages ----------------------
@@ -296,8 +301,9 @@ if page == "Dashboard":
                 key=f"classical_{card['page']}",
                 help=f"Click to learn about {card['title']}"
             ):
-                st.session_state.menu = card['page']
-                st.rerun()
+                st.session_state['next_page'] = card['page']
+                st.experimental_rerun()
+ 
     
     # --- Modern Encryption Section ---
     st.markdown("<div class='section-header'>Modern Encryption</div>", unsafe_allow_html=True)
@@ -312,8 +318,9 @@ if page == "Dashboard":
                 key=f"modern_{card['page']}",
                 help=f"Click to learn about {card['title']}"
             ):
-                st.session_state.menu = card['page']
-                st.rerun()
+                st.session_state['next_page'] = card['page']
+                st.experimental_rerun()
+
     
     # --- History Section ---
     st.markdown("<div class='section-header'>History</div>", unsafe_allow_html=True)
@@ -328,8 +335,9 @@ if page == "Dashboard":
             key=f"history_{history_card['page']}",
             help="Click to learn about cryptography history"
         ):
-            st.session_state.menu = history_card['page']
-            st.rerun()
+            st.session_state['next_page'] = card['page']
+            st.experimental_rerun()
+
     
     # --- ADD DASHBOARD-SPECIFIC CSS HERE ---
     st.markdown("""
