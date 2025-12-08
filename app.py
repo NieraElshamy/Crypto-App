@@ -119,25 +119,25 @@ FLASHCARDS_DATA = {
     "classical_ciphers": [
         {
             "title": "Affine Cipher",
-            "description": "A monoalphabetic substitution cipher using mathematical functions.",
+            "description": "",
             "page": "Affine",
             "icon": ""
         },
         {
             "title": "Vigenère Cipher",
-            "description": "A polyalphabetic substitution cipher using a keyword.",
+            "description": "",
             "page": "Vigenère",
             "icon": ""
         },
         {
             "title": "DNA Encryption",
-            "description": "Encryption based on DNA sequences and biological concepts.",
+            "description": ".",
             "page": "DNA",
             "icon": ""
         },
         {
             "title": "Row Transposition",
-            "description": "A transposition cipher that rearranges characters in rows.",
+            "description": "",
             "page": "Row Transposition",
             "icon": ""
         }
@@ -145,13 +145,13 @@ FLASHCARDS_DATA = {
     "modern_encryption": [
         {
             "title": "DES Encryption",
-            "description": "Data Encryption Standard - A symmetric-key block cipher.",
+            "description": "",
             "page": "DES",
             "icon": ""
         },
         {
             "title": "AES Encryption",
-            "description": "Advanced Encryption Standard - The most widely used encryption.",
+            "description": "",
             "page": "AES",
             "icon": ""
         }
@@ -159,7 +159,7 @@ FLASHCARDS_DATA = {
     "history": [
         {
             "title": "History",
-            "description": "Learn about the evolution of cryptography through time.",
+            "description": "",
             "page": "History",
             "icon": ""
         }
@@ -184,25 +184,25 @@ FLASHCARDS_DATA = {
     "classical_ciphers": [
         {
             "title": "Affine Cipher",
-            "description": "A monoalphabetic substitution cipher using mathematical functions.",
+            "description": "",
             "page": "Affine",
             "icon": ""
         },
         {
             "title": "Vigenère Cipher",
-            "description": "A polyalphabetic substitution cipher using a keyword.",
+            "description": "",
             "page": "Vigenère",
             "icon": ""
         },
         {
             "title": "DNA Encryption",
-            "description": "Encryption based on DNA sequences and biological concepts.",
+            "description": "",
             "page": "DNA",
             "icon": ""
         },
         {
             "title": "Row Transposition",
-            "description": "A transposition cipher that rearranges characters in rows.",
+            "description": "",
             "page": "Row Transposition",
             "icon": ""
         }
@@ -210,13 +210,13 @@ FLASHCARDS_DATA = {
     "modern_encryption": [
         {
             "title": "DES Encryption",
-            "description": "Data Encryption Standard - A symmetric-key block cipher.",
+            "description": "",
             "page": "DES",
             "icon": ""
         },
         {
             "title": "AES Encryption",
-            "description": "Advanced Encryption Standard - The most widely used encryption.",
+            "description": "",
             "page": "AES",
             "icon": ""
         }
@@ -224,7 +224,7 @@ FLASHCARDS_DATA = {
     "history": [
         {
             "title": "History",
-            "description": "Learn about the evolution of cryptography through time.",
+            "description": "",
             "page": "History",
             "icon": ""
         }
