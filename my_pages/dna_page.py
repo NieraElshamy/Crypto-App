@@ -51,7 +51,6 @@ def add_to_history(algo, action, input_text, output_text):
 # =========================
 
 def show_dna_page():
-<<<<<<< HEAD
     st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">DNA Encryption / Decryption</h1>', unsafe_allow_html=True)
     
     # Initialize state
@@ -67,52 +66,6 @@ def show_dna_page():
 
     result_e = ""
     result_d = ""
-=======
-       # st.set_page_config(page_title="🧬 DNA Cipher", layout="wide")
-       # st.markdown("<h1 style='text-align: center; color: #CF60CA;'>🧬 DNA Cipher Tool</h1>", unsafe_allow_html=True)
-        st.markdown("<h4 style='text-align: center; color: #cc99ff;'>Encrypt/Decrypt Texts & Files </h4>", unsafe_allow_html=True)
-        st.markdown("---")
-
-  
-    
-    # ---------------- Text Tab ----------------
-   
-        st.markdown("<h3 style='color:#cc99ff;'>Text Encryption / Decryption</h3>", unsafe_allow_html=True)
-
-        if "text" not in st.session_state:
-            st.session_state.text = ""
-        result_e = ""
-        result_d = ""
-        text = st.text_input(" Plain Text / Cipher Text (DNA)", st.session_state.text)
-        key_text = st.text_input("Enter Key", type="default")
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("Encrypt"):
-                if text and key_text:
-                    result_e = dna_encrypt(text, key_text)
-                    add_to_history("DNA", "Encryption", text, result_e)
-                else:
-                    st.error("⚠ Please enter text and key.")
-        with col2:
-            if st.button("Decrypt"):
-                if text and key_text:
-                    try:
-                        result_d = dna_decrypt(text, key_text)
-                        add_to_history("DNA", "Decryption", text, result_d)
-                    except Exception as e:
-                        st.error(f"❌ Failed to decrypt: {e}")
-                else:
-                    st.error("⚠ Please enter cipher text and key.")
-        if result_e:
-          st.subheader("Encryption")
-          st.code(result_e)
-        if result_d:
-          st.subheader("Decryption")
-          st.code(result_d) 
-    # ---------------- File Tab ----------------
-        st.markdown("---")
-        st.markdown("<h3 style='color:#cc99ff;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
->>>>>>> 5acf1a8a49b3b6a40938b76f0a4dae40270f6813
 
     col1, col2 = st.columns(2)
 
