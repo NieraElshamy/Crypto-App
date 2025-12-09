@@ -146,14 +146,11 @@ def show_row_page():
     """, unsafe_allow_html=True)
 
     # ---------- Floating Circles ----------
-    st.markdown("""
-    <div class="float-circle"></div>
-    <div class="float-circle"></div>
-    """, unsafe_allow_html=True)
+    
 
-    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Row Transposition Cipher Encryption / Decryption</h1>', unsafe_allow_html=True)
-
-    # ---------- Input fields ----------
+    # ------- #)
+    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Row Transposition Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+    st.markdown("<h3 style='color:#cc99ff;'> TEXT Encryption / Decryption</h3>", unsafe_allow_html=True)
     txt = st.text_input("Text", key="vig_text", 
                        help="Enter text containing only letters (other characters will be ignored)")
     key = st.text_input("Key", key="vig_key", 
@@ -163,9 +160,13 @@ def show_row_page():
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Encrypt", key="row_enc_btn", help="Click to encrypt text"):
+            if  not key   or not key.isdigit() or len(key) < 2:
+                st.error("Key must be numeric (digits only) and at least 2 digits long.")
             try:
                 enc_text = row_transposition_encrypt(txt, key)
-                st.markdown(f'<div class="row-output">Encrypted: {enc_text}</div>', unsafe_allow_html=True)
+                if enc_text:
+                   st.subheader("Decryption")
+                   st.code( enc_text)
                 add_to_history("Row Transposition", "Encryption", txt, enc_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
@@ -173,10 +174,51 @@ def show_row_page():
         if st.button("Decrypt", key="row_dec_btn", help="Click to decrypt text"):
             try:
                 dec_text = row_transposition_decrypt(txt, key)
-                st.markdown(f'<div class="row-output">Decrypted: {dec_text}</div>', unsafe_allow_html=True)
+                if dec_text:
+                   st.subheader("Decryption")
+                   st.code( dec_text)
                 add_to_history("Row Transposition", "Decryption", txt, dec_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
-    
+      # ---------- File Encryption / Decryption ----------
+    st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
+
+
+    uploaded_file = st.file_uploader("Upload a text file", type=["txt"], key="row_upload")
+    file_key = st.text_input("File Key", key="file_key_tab2")
+
+    if uploaded_file and file_key:
+        file_content = uploaded_file.read().decode("utf-8")
+        col3, col4 = st.columns([1,1])
+        if  not file_key   or not file_key.isdigit() or len(file_key) < 2:
+                st.error("Key must be numeric (digits only) and at least 2 digits long.")
+        with col3:
+            if st.button("Encrypt File"):
+                cipher_file = row_transposition_encrypt(file_content, file_key.strip())
+                add_to_history("Row Transposition", "Encryption", file_content, cipher_file)
+                st.success("✅ File Encrypted Successfully!")
+                st.download_button(
+                    label="⬇ Download Encrypted File",
+                    data=cipher_file,
+                    file_name=f"{uploaded_file.name.replace('.txt','')}_encrypted.txt",
+                    mime="text/plain"
+                )
+                st.text_area("Encrypted File Preview", cipher_file, height=150)
+        with col4:
+            if st.button("Decrypt File"):
+                try:
+                    plain_file =  row_transposition_decrypt(file_content, file_key.strip())
+                    add_to_history("Row Transposition", "Decryption", file_content, plain_file)
+                    st.success("✅ File Decrypted Successfully!")
+                    st.download_button(
+                        label="⬇ Download Decrypted File",
+                        data=plain_file,
+                        file_name=f"{uploaded_file.name.replace('.txt','')}_decrypted.txt",
+                        mime="text/plain"
+                    )
+                    st.text_area("Decrypted File Preview", plain_file, height=150)
+                except Exception as e:
+                    st.error(f" Failed to decrypt: {e}")
+
     # ---------- Information Section ----------
     st.markdown('</div>', unsafe_allow_html=True)

@@ -1,6 +1,12 @@
 import streamlit as st
 from pyDes import des, ECB, PAD_PKCS5
 ###from pyDes import des, ECB, PAD_PKCS5
+def is_hex(s):
+    try:
+        bytes.fromhex(s.strip())
+        return True
+    except ValueError:
+        return False
 
 # دالة التشفير
 def des_encryptt(plaintext, key):
@@ -101,7 +107,7 @@ def show_des_page():
     #st.markdown('<h1 style="text-align:center; color:#600080; font-weight:700; margin-bottom:25px;"> FILE Encryption / Decryption</h1>', unsafe_allow_html=True)
     st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
-    file_key = st.text_input("File Key", key="file_key_tab2")
+    file_key = st.text_input("File Key(8 chars)", key="file_key_tab2")
 
     if uploaded_file and file_key:
             if len(file_key) != 8:
@@ -112,7 +118,7 @@ def show_des_page():
               with col3:
                 if st.button("Encrypt File"):
                     cipher_file = des_encryptt(file_content, file_key)
-                    add_to_history("DNA", "Encryption", file_content, cipher_file)
+                    add_to_history("DES", "Encryption", file_content, cipher_file)
                     st.success("✅ File Encrypted Successfully!")
                     st.download_button(
                         label="⬇ Download Encrypted File",
@@ -123,9 +129,10 @@ def show_des_page():
                     st.text_area("Encrypted File Preview", cipher_file, height=150)
               with col4:
                 if st.button("Decrypt File"):
+                 if is_hex(file_content): # pyright: ignore[reportUndefinedVariable]
                     try:
                         plain_file = des_decryptt(file_content, file_key)
-                        add_to_history("DNA", "Decryption", file_content, plain_file)
+                        add_to_history("DES", "Decryption", file_content, plain_file)
                         st.success("✅ File Decrypted Successfully!")
                         st.download_button(
                             label="⬇ Download Decrypted File",
@@ -136,4 +143,6 @@ def show_des_page():
                         st.text_area("Decrypted File Preview", plain_file, height=150)
                     except Exception as e:
                         st.error(f"❌ Failed to decrypt: {e}")
+                 else:
+                    st.error("File content is NOT hex ❌")
 

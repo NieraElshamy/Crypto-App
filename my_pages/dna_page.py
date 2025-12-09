@@ -78,7 +78,7 @@ def show_dna_page():
             if st.button("Encrypt Text", use_container_width=True):
                 if plain_text and key_text:
                     result = dna_encrypt(plain_text, key_text)
-                    st.session_state.result_text = result
+                    st.session_state.result_texte = result
                     st.session_state.cipher_text = result
                     add_to_history("DNA", "Encryption", plain_text, result)
                     st.success("✅ Text Encrypted Successfully!")
@@ -89,7 +89,7 @@ def show_dna_page():
                 if cipher_text and key_text:
                     try:
                         result = dna_decrypt(cipher_text, key_text)
-                        st.session_state.result_text = result
+                        st.session_state.result_textd = result
                         st.session_state.plain_text = result
                         add_to_history("DNA", "Decryption", cipher_text, result)
                         st.success("✅ Text Decrypted Successfully!")
@@ -97,10 +97,14 @@ def show_dna_page():
                         st.error(f"❌ Failed to decrypt: {e}")
                 else:
                     st.error("⚠ Please enter cipher text and key.")
-
-        if st.session_state.result_text:
-            st.text_area("Result Preview", st.session_state.result_text, height=100)
-
+        if st.session_state.result_texte:
+            #st.text_area("Result Preview", st.session_state.result_text, height=100)
+            st.subheader("Encryption")
+            st.code(st.session_state.result_texte)
+        if st.session_state.result_textd:
+            #st.text_area("Result Preview", st.session_state.result_text, height=100)
+            st.subheader("Decryption")
+            st.code(st.session_state.result_textd)
     # ---------------- File Tab ----------------
     with tabs[1]:
         st.markdown("<h3 style='color:#cc99ff;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
@@ -143,4 +147,4 @@ def show_dna_page():
 # Show DNA page directly
 # =========================
 
-show_dna_page()
+

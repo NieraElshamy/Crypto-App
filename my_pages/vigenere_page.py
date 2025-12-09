@@ -58,7 +58,7 @@ def show_vigenere_page():
     # ---------- File Encryption / Decryption ----------
     st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
 
-    uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
+    uploaded_file = st.file_uploader("Upload a text file", type=["txt"], key="vigenere_upload")
     file_key = st.text_input("File Key", key="file_key_tab2")
 
     if uploaded_file and file_key:
@@ -95,4 +95,4 @@ def show_vigenere_page():
 # =========================
 # Show Vigenère page
 # =========================
-show_vigenere_page()
+

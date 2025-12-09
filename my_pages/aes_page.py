@@ -120,4 +120,4 @@ def show_aes_page():
 # =========================
 # Show AES page directly
 # =========================
-show_aes_page()
+

@@ -89,9 +89,9 @@ def show_affine_page():
     <div class="float-circle"></div>
     <div class="float-circle"></div>
     """, unsafe_allow_html=True)
-
-    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Affine Cipher</h1>', unsafe_allow_html=True)
-
+ #st.title("Affine Encryption / Decryption")
+    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Affine Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+    st.markdown("<h3 style='color:#cc99ff;'> TEXT Encryption / Decryption</h3>", unsafe_allow_html=True)
     # ---------- Input fields ----------
     txt = st.text_input("Text", key="affine_text")
     a = st.number_input("Key a", min_value=1, max_value=25, step=1, key="affine_a")
@@ -103,7 +103,9 @@ def show_affine_page():
         if st.button("Encrypt", key="affine_enc_btn"):
             try:
                 enc_text = affine_encrypt(txt, a, b)
-                st.markdown(f'<div class="affine-output">{enc_text}</div>', unsafe_allow_html=True)
+                if enc_text:
+                   st.subheader("Decryption")
+                   st.code( enc_text)
                 add_to_history("Affine", "Encryption", txt, enc_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
@@ -111,8 +113,48 @@ def show_affine_page():
         if st.button("Decrypt", key="affine_dec_btn"):
             try:
                 dec_text = affine_decrypt(txt, a, b)
-                st.markdown(f'<div class="affine-output">{dec_text}</div>', unsafe_allow_html=True)
+                if dec_text:
+                   st.subheader("Decryption")
+                   st.code( dec_text)
+              
                 add_to_history("Affine", "Decryption", txt, dec_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
+    st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
+    uploaded_file = st.file_uploader("Upload a text file", type=["txt"], key="affine")
+    afile = st.number_input("Key a", min_value=1, max_value=25, step=1, key="affine_afile")
+    bfile = st.number_input("Key b", min_value=0, max_value=25, step=1, key="affine_bfile")
+    if uploaded_file and afile and bfile :
+              file_content = uploaded_file.read().decode("utf-8")
+              col3, col4 = st.columns([1,1])
+              with col3:
+                if st.button("Encrypt File"):
+                    cipher_file = affine_encrypt(file_content, afile,bfile)
+                    add_to_history("DES", "Encryption", file_content, cipher_file)
+                    st.success("✅ File Encrypted Successfully!")
+                    st.download_button(
+                        label="⬇ Download Encrypted File",
+                        data=cipher_file,
+                        file_name=f"{uploaded_file.name.replace('.txt','')}_encrypted.txt",
+                        mime="text/plain"
+                    )
+                    st.text_area("Encrypted File Preview", cipher_file, height=150)
+              with col4:
+                if st.button("Decrypt File"):
+                    try:
+                        plain_file = affine_decrypt(file_content, afile,bfile)
+                        add_to_history("DES", "Decryption", file_content, plain_file)
+                        st.success("✅ File Decrypted Successfully!")
+                        st.download_button(
+                            label="⬇ Download Decrypted File",
+                            data=plain_file,
+                            file_name=f"{uploaded_file.name.replace('.txt','')}_decrypted.txt",
+                            mime="text/plain"
+                        )
+                        st.text_area("Decrypted File Preview", plain_file, height=150)
+                    except Exception as e:
+                        st.error(f"❌ Failed to decrypt: {e}")
+               
+
+
 
