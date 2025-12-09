@@ -209,7 +209,7 @@ FLASHCARDS_DATA = {
     ],
     "modern_encryption": [
         {
-            "title": "DES Encryption",
+            "title": "DES Cipher",
             "description": "Data Encryption Standard - A symmetric-key block cipher.",
             "page": "DES",
             "icon": ""

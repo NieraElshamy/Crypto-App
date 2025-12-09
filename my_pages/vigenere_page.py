@@ -56,6 +56,7 @@ def show_vigenere_page():
         st.code(result_d)
 
     # ---------- File Encryption / Decryption ----------
+    st.markdown("---")
     st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader("Upload a text file", type=["txt"], key="vigenere_upload")

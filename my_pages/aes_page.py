@@ -45,40 +45,44 @@ def add_to_history(algo, action, input_text, output_text):
 # ---------------- AES Page ----------------
 def show_aes_page():
     st.set_page_config(page_title="AES Cipher", layout="wide")
-    st.markdown("<h1 style='text-align:center; color:#CF60CA;'>AES Encryption / Decryption</h1>", unsafe_allow_html=True)
-
+    #st.markdown("<h1 style='text-align:center; color:#CF60CA;'>AES Encryption / Decryption</h1>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align:center; color:#cc99ff;'>Encrypt/Decrypt Texts & Files</h4>", unsafe_allow_html=True)
+    st.markdown("---")
     # ---------- Text Encryption / Decryption ----------
     st.markdown("<h3 style='color:#cc99ff;'>Text Encryption / Decryption</h3>", unsafe_allow_html=True)
     text_input = st.text_input("Plaintext / Cipher")
     key_input = st.text_input("Key (16 chars)")
-
+    result_e=""
+    result_d=""
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Encrypt Text"):
+        if st.button("Encrypt"):
             if not text_input or not key_input:
                 st.warning("⚠️ Please enter both text and key.")
             else:
                 try:
-                    enc = aes_encrypt(text_input.strip(), key_input.strip())
-                    add_to_history("AES", "Encryption", text_input, enc)
-                    st.success("✅ Text Encrypted Successfully!")
-                    st.text_area("Encrypted Text Preview", enc, height=150)
+                    result_e = aes_encrypt(text_input.strip(), key_input.strip())
+                    add_to_history("AES", "Encryption", text_input, result_e)
                 except Exception as e:
                     st.error(f"❌ {e}")
     with col2:
-        if st.button("Decrypt Text"):
+        if st.button("Decrypt"):
             if not text_input or not key_input:
                 st.warning("⚠️ Please enter both cipher text and key.")
             else:
                 try:
-                    dec = aes_decrypt(text_input.strip(), key_input.strip())
-                    add_to_history("AES", "Decryption", text_input, dec)
-                    st.success("✅ Text Decrypted Successfully!")
-                    st.text_area("Decrypted Text Preview", dec, height=150)
+                    result_d = aes_decrypt(text_input.strip(), key_input.strip())
+                    add_to_history("AES", "Decryption", text_input, result_d)
                 except Exception as e:
                     st.error(f"❌ {e}")
-
+    if result_e:
+        st.subheader("Encryption")
+        st.code(result_e)
+    if result_d:
+        st.subheader("Decryption")
+        st.code(result_d) 
     # ---------- File Encryption / Decryption ----------
+    st.markdown("---")
     st.markdown("<h3 style='color:#cc99ff;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
     file_key = st.text_input("File Key (16 chars)", key="aes_file_key_tab2")
