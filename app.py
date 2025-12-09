@@ -119,25 +119,25 @@ FLASHCARDS_DATA = {
     "classical_ciphers": [
         {
             "title": "Affine Cipher",
-            "description": "",
+            "description": "A monoalphabetic substitution cipher using mathematical functions.",
             "page": "Affine",
             "icon": ""
         },
         {
             "title": "Vigenère Cipher",
-            "description": "",
+            "description": "A polyalphabetic substitution cipher using a keyword.",
             "page": "Vigenère",
             "icon": ""
         },
         {
             "title": "DNA Encryption",
-            "description": ".",
+            "description": "Encryption based on DNA sequences and biological concepts.",
             "page": "DNA",
             "icon": ""
         },
         {
             "title": "Row Transposition",
-            "description": "",
+            "description": "A transposition cipher that rearranges characters in rows.",
             "page": "Row Transposition",
             "icon": ""
         }
@@ -145,13 +145,13 @@ FLASHCARDS_DATA = {
     "modern_encryption": [
         {
             "title": "DES Encryption",
-            "description": "",
+            "description": "Data Encryption Standard - A symmetric-key block cipher.",
             "page": "DES",
             "icon": ""
         },
         {
             "title": "AES Encryption",
-            "description": "",
+            "description": "Advanced Encryption Standard - The most widely used encryption.",
             "page": "AES",
             "icon": ""
         }
@@ -159,7 +159,7 @@ FLASHCARDS_DATA = {
     "history": [
         {
             "title": "History",
-            "description": "",
+            "description": "Learn about the evolution of cryptography through time.",
             "page": "History",
             "icon": ""
         }
@@ -170,13 +170,13 @@ FLASHCARDS_DATA = {
     "main_categories": [
         {
             "title": "Classical Ciphers",
-            "description": "Affine , DNA , Row transposition , Vigenere",
+            "description": "",
             "type": "main_category",
             "color": "#4a86e8"
         },
         {
             "title": "Modern Encryption",
-            "description": "AES , DES ",
+            "description": "",
             "type": "main_category",
             "color": "#6aa84f"
         }
@@ -184,25 +184,25 @@ FLASHCARDS_DATA = {
     "classical_ciphers": [
         {
             "title": "Affine Cipher",
-            "description": "",
+            "description": "A monoalphabetic substitution cipher using mathematical functions.",
             "page": "Affine",
             "icon": ""
         },
         {
             "title": "Vigenère Cipher",
-            "description": "",
+            "description": "A polyalphabetic substitution cipher using a keyword.",
             "page": "Vigenère",
             "icon": ""
         },
         {
             "title": "DNA Encryption",
-            "description": "",
+            "description": "Encryption based on DNA sequences and biological concepts.",
             "page": "DNA",
             "icon": ""
         },
         {
             "title": "Row Transposition",
-            "description": "",
+            "description": "A transposition cipher that rearranges characters in rows.",
             "page": "Row Transposition",
             "icon": ""
         }
@@ -210,13 +210,13 @@ FLASHCARDS_DATA = {
     "modern_encryption": [
         {
             "title": "DES Encryption",
-            "description": "",
+            "description": "Data Encryption Standard - A symmetric-key block cipher.",
             "page": "DES",
             "icon": ""
         },
         {
             "title": "AES Encryption",
-            "description": "",
+            "description": "Advanced Encryption Standard - The most widely used encryption.",
             "page": "AES",
             "icon": ""
         }
@@ -224,24 +224,19 @@ FLASHCARDS_DATA = {
     "history": [
         {
             "title": "History",
-            "description": "",
+            "description": "Learn about the evolution of cryptography through time.",
             "page": "History",
             "icon": ""
         }
     ]
 }
 # ---------------------- Sidebar ----------------------
-if 'next_page' in st.session_state:
-    default_page = st.session_state.pop('next_page')
-else:
-    default_page = "Dashboard"
 with st.sidebar:
     st.markdown("<h1>Crypto App</h1>", unsafe_allow_html=True)
     page = st.radio(
         "",
         ["Dashboard", "Affine", "DNA", "Vigenère", "Row Transposition", "DES", "AES", "History"],
-        key="menu",
-        index=["Dashboard", "Affine", "DNA", "Vigenère", "Row Transposition", "DES", "AES", "History"].index(default_page)
+        key="menu"
     )
 
 # ---------------------- Pages ----------------------
@@ -301,13 +296,11 @@ if page == "Dashboard":
                 key=f"classical_{card['page']}",
                 help=f"Click to learn about {card['title']}"
             ):
-                st.session_state['next_page'] = card['page']
-                st.experimental_rerun()
- 
+                st.session_state.menu = card['page']
+                st.rerun()
     
     # --- Modern Encryption Section ---
     st.markdown("<div class='section-header'>Modern Encryption</div>", unsafe_allow_html=True)
-    
     
     # إنشاء فلاش كارد صغيرة لل Modern Encryption
     modern_cols = st.columns(2)
@@ -319,9 +312,8 @@ if page == "Dashboard":
                 key=f"modern_{card['page']}",
                 help=f"Click to learn about {card['title']}"
             ):
-                st.session_state['next_page'] = card['page']
-                st.experimental_rerun()
-
+                st.session_state.menu = card['page']
+                st.rerun()
     
     # --- History Section ---
     st.markdown("<div class='section-header'>History</div>", unsafe_allow_html=True)
@@ -336,9 +328,8 @@ if page == "Dashboard":
             key=f"history_{history_card['page']}",
             help="Click to learn about cryptography history"
         ):
-            st.session_state['next_page'] = card['page']
-            st.experimental_rerun()
-
+            st.session_state.menu = history_card['page']
+            st.rerun()
     
     # --- ADD DASHBOARD-SPECIFIC CSS HERE ---
     st.markdown("""
@@ -609,4 +600,4 @@ elif page == "History":
     st.title("History")
     show_history_page()
 
-# REMOVED GLOBAL BUTTON CSS - Now it's only in the Dashboard section
+# REMOVED GLOBAL BUTTON CSS - Now it's only in the Dashboard section

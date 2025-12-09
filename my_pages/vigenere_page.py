@@ -20,11 +20,12 @@ def add_to_history(algo, action, input_text, output_text):
 def show_vigenere_page():
     #st.title("Vigenère Encryption / Decryption")
     #st.set_page_config(page_title=" Vigenère Cipher", layout="wide")
-    st.markdown("<h1 style='text-align:center; color:#600080;'>Vigenère Cipher Tool</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align:center; color:#CF60CA;'>Vigenère Cipher Tool</h1>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align:center; color:#cc99ff;'>Encrypt/Decrypt Texts & Files</h4>", unsafe_allow_html=True)
     st.markdown("---")
     
     # ---------- Text Encryption / Decryption ----------
+    st.markdown("<h3 style='color:#cc99ff;'> Text Encryption / Decryption</h3>", unsafe_allow_html=True)
     text_input = st.text_input("Plaintext / Cipher")
     key_input = st.text_input("Key")
 

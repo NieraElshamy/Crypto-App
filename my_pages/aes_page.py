@@ -1,7 +1,7 @@
-# my_pages/aes_page.py
 import streamlit as st
 from Crypto.Cipher import AES
 import base64
+
 # ---------------- Helper Functions ----------------
 BLOCK_SIZE = 16  # AES-128
 
@@ -31,118 +31,93 @@ def aes_decrypt(enc, key):
     decrypted = cipher.decrypt(enc_bytes)
     return unpad_bytes(decrypted).decode("utf-8")
 
-# ---------------- History Helper ---------------- #
+# ---------------- History Helper ----------------
 def add_to_history(algo, action, input_text, output_text):
     if "history" not in st.session_state:
         st.session_state["history"] = []
     st.session_state["history"].append({
-        "algo": algo,       # "AES"
-        "action": action,   # "Encryption" أو "Decryption"
+        "algo": algo,
+        "action": action,
         "input": input_text,
         "output": output_text
     })
 
 # ---------------- AES Page ----------------
 def show_aes_page():
-    # ---------- Custom CSS ----------
-    st.markdown("""
-    <style>
-    body {
-        background: linear-gradient(135deg, #0b0c10, #1c1f2a);
-        color: #e0e0e0;
-        font-family: 'Inter', sans-serif;
-    }
+    st.set_page_config(page_title="AES Cipher", layout="wide")
+    st.markdown("<h1 style='text-align:center; color:#CF60CA;'>AES Encryption / Decryption</h1>", unsafe_allow_html=True)
 
-    .float-circle {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(168,192,255,0.08);
-        animation: floatAnim 8s ease-in-out infinite;
-    }
-    .float-circle:nth-child(1){ top: 30px; left: 20%; width: 80px; height: 80px;}
-    .float-circle:nth-child(2){ top: 150px; left: 70%; width: 100px; height: 100px; animation-delay: 3s;}
-    @keyframes floatAnim {0% {transform: translateY(0);}50% {transform: translateY(-15px);}100% {transform: translateY(0);}}
+    # ---------- Text Encryption / Decryption ----------
+    st.markdown("<h3 style='color:#cc99ff;'>Text Encryption / Decryption</h3>", unsafe_allow_html=True)
+    text_input = st.text_input("Plaintext / Cipher")
+    key_input = st.text_input("Key (16 chars)")
 
-    .aes-card {
-        background: rgba(255,255,255,0.03);
-        backdrop-filter: blur(16px);
-        border-radius: 25px;
-        padding: 25px;
-        margin-bottom: 30px;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-    }
-    .aes-card:hover {transform: translateY(-8px); box-shadow: 0 14px 32px rgba(0,0,0,0.35);}
-    .aes-title {color: #a8c0ff; font-size: 24px; font-weight: 700; margin-bottom: 15px;}
-    .aes-output {
-        background: rgba(255,255,255,0.05);
-        padding: 12px; border-radius: 15px;
-        font-family: monospace; color: #fff;
-        margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        word-break: break-all;
-    }
-    .aes-btn {
-        background: linear-gradient(90deg, #627daa, #a8c0ff);
-        border: none;
-        color: white;
-        font-weight: 600;
-        padding: 16px 32px;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 20px;
-        font-size: 18px;
-        width: 100%;
-    }
-    .aes-btn:hover {
-        background: linear-gradient(90deg, #a8c0ff, #fbc2eb);
-        transform: scale(1.05);
-        box-shadow: 0 8px 24px rgba(168,192,255,0.4);
-    }
-
-    /* Input fields */
-    div.stTextInput>div>input {
-        background: rgba(255,255,255,0.05) !important;
-        color: #ffffff !important;
-        border-radius: 15px;
-        padding: 10px;
-        border: 1px solid rgba(255,255,255,0.2);
-        font-size: 16px;
-    }
-    div.stTextInput>div>input::placeholder {
-        color: #b0b0b0 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # ---------- Floating Circles ----------
-    st.markdown("""
-    <div class="float-circle"></div>
-    <div class="float-circle"></div>
-    """, unsafe_allow_html=True)
-
-    st.markdown('<h1 style="color:#a8c0ff; font-weight:700; margin-bottom:25px;">AES Encryption / Decryption</h1>', unsafe_allow_html=True)
-
-    # ---------- Input fields ----------
-    txt = st.text_input("Text", key="aes_text")
-    key = st.text_input("Key (16 chars)", key="aes_key")
-
-    # ---------- Buttons ----------
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Encrypt", key="aes_enc_btn", help="Click to encrypt text"):
-            try:
-                enc_text = aes_encrypt(txt, key)
-                st.markdown(f'<div class="aes-output">{enc_text}</div>', unsafe_allow_html=True)
-                add_to_history("AES", "Encryption", txt, enc_text)
-            except Exception as e:
-                st.error(f"Error: {str(e)}")
+        if st.button("Encrypt Text"):
+            if not text_input or not key_input:
+                st.warning("⚠️ Please enter both text and key.")
+            else:
+                try:
+                    enc = aes_encrypt(text_input.strip(), key_input.strip())
+                    add_to_history("AES", "Encryption", text_input, enc)
+                    st.success("✅ Text Encrypted Successfully!")
+                    st.text_area("Encrypted Text Preview", enc, height=150)
+                except Exception as e:
+                    st.error(f"❌ {e}")
     with col2:
-        if st.button("Decrypt", key="aes_dec_btn", help="Click to decrypt text"):
-            try:
-                dec_text = aes_decrypt(txt, key)
-                st.markdown(f'<div class="aes-output">{dec_text}</div>', unsafe_allow_html=True)
-                add_to_history("AES", "Decryption", txt, dec_text)
-            except Exception as e:
-                st.error(f"Error: {str(e)}")
+        if st.button("Decrypt Text"):
+            if not text_input or not key_input:
+                st.warning("⚠️ Please enter both cipher text and key.")
+            else:
+                try:
+                    dec = aes_decrypt(text_input.strip(), key_input.strip())
+                    add_to_history("AES", "Decryption", text_input, dec)
+                    st.success("✅ Text Decrypted Successfully!")
+                    st.text_area("Decrypted Text Preview", dec, height=150)
+                except Exception as e:
+                    st.error(f"❌ {e}")
+
+    # ---------- File Encryption / Decryption ----------
+    st.markdown("<h3 style='color:#cc99ff;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
+    uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
+    file_key = st.text_input("File Key (16 chars)", key="aes_file_key_tab2")
+
+    if uploaded_file and file_key:
+        file_content = uploaded_file.read().decode("utf-8")
+        col3, col4 = st.columns([1,1])
+        with col3:
+            if st.button("Encrypt File"):
+                try:
+                    cipher_file = aes_encrypt(file_content, file_key.strip())
+                    add_to_history("AES", "Encryption", file_content, cipher_file)
+                    st.success("✅ File Encrypted Successfully!")
+                    st.download_button(
+                        label="⬇ Download Encrypted File",
+                        data=cipher_file,
+                        file_name=f"{uploaded_file.name.replace('.txt','')}_encrypted.txt",
+                        mime="text/plain"
+                    )
+                    st.text_area("Encrypted File Preview", cipher_file, height=150)
+                except Exception as e:
+                    st.error(f"❌ {e}")
+        with col4:
+            if st.button("Decrypt File"):
+                try:
+                    plain_file = aes_decrypt(file_content, file_key.strip())
+                    add_to_history("AES", "Decryption", file_content, plain_file)
+                    st.success("✅ File Decrypted Successfully!")
+                    st.download_button(
+                        label="⬇ Download Decrypted File",
+                        data=plain_file,
+                        file_name=f"{uploaded_file.name.replace('.txt','')}_decrypted.txt",
+                        mime="text/plain"
+                    )
+                    st.text_area("Decrypted File Preview", plain_file, height=150)
+                except Exception as e:
+                    st.error(f"❌ {e}")
+
+# =========================
+# Show AES page directly
+# =========================
+show_aes_page()

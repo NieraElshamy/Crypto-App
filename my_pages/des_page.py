@@ -70,7 +70,9 @@ def des_decrypt(cipher_hex, key):
 
 # ---------- Streamlit Page ----------
 def show_des_page():
-    st.title("DES Encryption / Decryption")
+    #st.title("DES Encryption / Decryption")
+    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">DES Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+    st.markdown("<h3 style='color:#cc99ff;'> TEXT Encryption / Decryption</h3>", unsafe_allow_html=True)
     text_input = st.text_input("Plaintext / Cipher (HEX)")
     key_input = st.text_input("Key (8 chars)")
     result_e = "" 
@@ -96,8 +98,8 @@ def show_des_page():
     if result_d:
       st.subheader("Decryption")
       st.code(result_d)
-    st.markdown("<h3>File Encryption / Decryption</h3>", unsafe_allow_html=True)
-
+    #st.markdown('<h1 style="text-align:center; color:#600080; font-weight:700; margin-bottom:25px;"> FILE Encryption / Decryption</h1>', unsafe_allow_html=True)
+    st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
     file_key = st.text_input("File Key", key="file_key_tab2")
 

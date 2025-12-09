@@ -52,15 +52,15 @@ def add_to_history(algo, action, input_text, output_text):
 
 def show_dna_page():
     st.set_page_config(page_title="🧬 DNA Cipher", layout="wide")
-    st.markdown("<h1 style='text-align: center; color: #4B0082;'>🧬 DNA Cipher Tool</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: #6A5ACD;'>Encrypt/Decrypt Texts & Files (UTF-8 Supported)</h4>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #CF60CA;'>🧬 DNA Cipher Tool</h1>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: #cc99ff;'>Encrypt/Decrypt Texts & Files (UTF-8 Supported)</h4>", unsafe_allow_html=True)
     st.markdown("---")
 
     tabs = st.tabs(["💬 Text Encryption", "📄 File Encryption"])
     
     # ---------------- Text Tab ----------------
     with tabs[0]:
-        st.markdown("<h3 style='color:#4B0082;'>Text Encryption / Decryption</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:#cc99ff;'>Text Encryption / Decryption</h3>", unsafe_allow_html=True)
 
         if "plain_text" not in st.session_state:
             st.session_state.plain_text = ""
@@ -103,7 +103,7 @@ def show_dna_page():
 
     # ---------------- File Tab ----------------
     with tabs[1]:
-        st.markdown("<h3 style='color:#4B0082;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:#cc99ff;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
 
         uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
         file_key = st.text_input("File Key", key="file_key_tab2")

@@ -1,8 +1,10 @@
 import streamlit as st
+import pyperclip  # لازم تثبتها: pip install pyperclip
 
 def show_history_page():
-    st.set_page_config(page_title="History 📝", layout="wide")
-    st.title("History of Encryption/Decryption 📝")
+    st.set_page_config(page_title="History 📝", layout="wide", )
+    #st.title("History of Encryption/Decryption 📝")
+    st.markdown('<h1 style="text-align:center; color:#cc99ff; font-weight:700; margin-bottom:25px;">History of Encryption/Decryption 📝</h1>', unsafe_allow_html=True)
 
     if "history" not in st.session_state:
         st.session_state["history"] = []
@@ -32,8 +34,6 @@ def show_history_page():
         # أيقونة حسب نوع العملية
         icon = "🔒" if item['action'] == "Encryption" else "🔓"
 
-        dtype = "💬 Text" if item['algo'] == "Text" else "📄 File"
-
         card_html = f"""
         <div style="
             border:2px solid {color};
@@ -47,28 +47,23 @@ def show_history_page():
             <h4 style="color:{color}; margin-bottom:5px;">{icon} {item['algo']} - {item['action']}</h4>
         </div>
         """
-
         col.markdown(card_html, unsafe_allow_html=True)
 
         with col.expander("View Details 🔍"):
             st.markdown("**Input:**")
             st.text_area(f"Input {idx}", item['input'], height=80, key=f"input_{idx}")
             if st.button(f"Copy Input {idx} 📋", key=f"copy_input_{idx}"):
-
-                st.clipboard(item['input'])
-
-
-                #st.experimental_set_clipboard(item['input'])
-
+                pyperclip.copy(item['input'])
                 st.success("✅ Input copied to clipboard!")
 
             st.markdown("**Output:**")
             st.text_area(f"Output {idx}", item['output'], height=80, key=f"output_{idx}")
             if st.button(f"Copy Output {idx} 📋", key=f"copy_output_{idx}"):
-                st.experimental_set_clipboard(item['output'])
+                pyperclip.copy(item['output'])
                 st.success("✅ Output copied to clipboard!")
 
     # زر لمسح التاريخ
     if st.button("Clear History 🗑️"):
-        st.session_state["history"] = []
+        st.session_state["history"] = []  # مسح البيانات
         st.success("History cleared!")
+        return  # فورًا يعيد رسم الصفحة بدون أي محتوى من الـ history
