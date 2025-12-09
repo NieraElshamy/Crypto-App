@@ -90,7 +90,9 @@ def show_affine_page():
     <div class="float-circle"></div>
     """, unsafe_allow_html=True)
  #st.title("Affine Encryption / Decryption")
-    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Affine Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+   # st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Affine Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align:center; color:#cc99ff;'>Encrypt/Decrypt Texts & Files</h4>", unsafe_allow_html=True)
+    st.markdown("---")
     st.markdown("<h3 style='color:#cc99ff;'> TEXT Encryption / Decryption</h3>", unsafe_allow_html=True)
     # ---------- Input fields ----------
     txt = st.text_input("Text", key="affine_text")
@@ -98,14 +100,13 @@ def show_affine_page():
     b = st.number_input("Key b", min_value=0, max_value=25, step=1, key="affine_b")
 
     # ---------- Buttons in same row ----------
+    dec_text=""
+    enc_text =""
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Encrypt", key="affine_enc_btn"):
             try:
                 enc_text = affine_encrypt(txt, a, b)
-                if enc_text:
-                   st.subheader("Decryption")
-                   st.code( enc_text)
                 add_to_history("Affine", "Encryption", txt, enc_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
@@ -113,13 +114,16 @@ def show_affine_page():
         if st.button("Decrypt", key="affine_dec_btn"):
             try:
                 dec_text = affine_decrypt(txt, a, b)
-                if dec_text:
-                   st.subheader("Decryption")
-                   st.code( dec_text)
-              
                 add_to_history("Affine", "Decryption", txt, dec_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
+    if enc_text:
+                   st.subheader("Encryption")
+                   st.code( enc_text)
+    if dec_text:
+                   st.subheader("Decryption")
+                   st.code( dec_text)
+    st.markdown("---")
     st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload a text file", type=["txt"], key="affine")
     afile = st.number_input("Key a", min_value=1, max_value=25, step=1, key="affine_afile")

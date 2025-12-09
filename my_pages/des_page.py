@@ -76,13 +76,15 @@ def des_decrypt(cipher_hex, key):
 
 # ---------- Streamlit Page ----------
 def show_des_page():
-    #st.title("DES Encryption / Decryption")
-    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">DES Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+    #st.title("DES Cipher")
+    #st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">DES Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align:center; color:#cc99ff;'>Encrypt/Decrypt Texts & Files</h4>", unsafe_allow_html=True)
+    st.markdown("---")
     st.markdown("<h3 style='color:#cc99ff;'> TEXT Encryption / Decryption</h3>", unsafe_allow_html=True)
     text_input = st.text_input("Plaintext / Cipher (HEX)")
     key_input = st.text_input("Key (8 chars)")
-    result_e = "" 
-    result_d= "" 
+    result_e = ""
+    result_d = ""
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Encrypt"):
@@ -96,14 +98,17 @@ def show_des_page():
             if not text_input or not key_input:
                 st.warning("⚠️ Please enter both text and key.")
             else:
-                result_d = des_decryptt(text_input.strip(), key_input.strip())
+                result_d= des_decryptt(text_input.strip(), key_input.strip())
                 add_to_history("DES", "Decryption", text_input, result_d)
+               
+    
     if result_e:
-      st.subheader("Encryption")
-      st.code(result_e)
+        st.subheader("Encryption")
+        st.code(result_e)
     if result_d:
-      st.subheader("Decryption")
-      st.code(result_d)
+        st.subheader("Decryption")
+        st.code(result_d)
+    st.markdown("---")
     #st.markdown('<h1 style="text-align:center; color:#600080; font-weight:700; margin-bottom:25px;"> FILE Encryption / Decryption</h1>', unsafe_allow_html=True)
     st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload a text file", type=["txt"])

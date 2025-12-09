@@ -51,62 +51,49 @@ def add_to_history(algo, action, input_text, output_text):
 # =========================
 
 def show_dna_page():
-    st.set_page_config(page_title="🧬 DNA Cipher", layout="wide")
-    st.markdown("<h1 style='text-align: center; color: #CF60CA;'>🧬 DNA Cipher Tool</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: #cc99ff;'>Encrypt/Decrypt Texts & Files (UTF-8 Supported)</h4>", unsafe_allow_html=True)
-    st.markdown("---")
+       # st.set_page_config(page_title="🧬 DNA Cipher", layout="wide")
+       # st.markdown("<h1 style='text-align: center; color: #CF60CA;'>🧬 DNA Cipher Tool</h1>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align: center; color: #cc99ff;'>Encrypt/Decrypt Texts & Files </h4>", unsafe_allow_html=True)
+        st.markdown("---")
 
-    tabs = st.tabs(["💬 Text Encryption", "📄 File Encryption"])
+  
     
     # ---------------- Text Tab ----------------
-    with tabs[0]:
+   
         st.markdown("<h3 style='color:#cc99ff;'>Text Encryption / Decryption</h3>", unsafe_allow_html=True)
 
-        if "plain_text" not in st.session_state:
-            st.session_state.plain_text = ""
-        if "cipher_text" not in st.session_state:
-            st.session_state.cipher_text = ""
-        if "result_text" not in st.session_state:
-            st.session_state.result_text = ""
-
-        plain_text = st.text_area("Enter Plain Text", st.session_state.plain_text, height=120)
-        cipher_text = st.text_area("Enter Cipher Text", st.session_state.cipher_text, height=120)
+        if "text" not in st.session_state:
+            st.session_state.text = ""
+        result_e = ""
+        result_d = ""
+        text = st.text_input(" Plain Text / Cipher Text (DNA)", st.session_state.text)
         key_text = st.text_input("Enter Key", type="default")
-
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Encrypt Text", use_container_width=True):
-                if plain_text and key_text:
-                    result = dna_encrypt(plain_text, key_text)
-                    st.session_state.result_texte = result
-                    st.session_state.cipher_text = result
-                    add_to_history("DNA", "Encryption", plain_text, result)
-                    st.success("✅ Text Encrypted Successfully!")
+            if st.button("Encrypt"):
+                if text and key_text:
+                    result_e = dna_encrypt(text, key_text)
+                    add_to_history("DNA", "Encryption", text, result_e)
                 else:
                     st.error("⚠ Please enter text and key.")
         with col2:
-            if st.button("Decrypt Text", use_container_width=True):
-                if cipher_text and key_text:
+            if st.button("Decrypt"):
+                if text and key_text:
                     try:
-                        result = dna_decrypt(cipher_text, key_text)
-                        st.session_state.result_textd = result
-                        st.session_state.plain_text = result
-                        add_to_history("DNA", "Decryption", cipher_text, result)
-                        st.success("✅ Text Decrypted Successfully!")
+                        result_d = dna_decrypt(text, key_text)
+                        add_to_history("DNA", "Decryption", text, result_d)
                     except Exception as e:
                         st.error(f"❌ Failed to decrypt: {e}")
                 else:
                     st.error("⚠ Please enter cipher text and key.")
-        if st.session_state.result_texte:
-            #st.text_area("Result Preview", st.session_state.result_text, height=100)
-            st.subheader("Encryption")
-            st.code(st.session_state.result_texte)
-        if st.session_state.result_textd:
-            #st.text_area("Result Preview", st.session_state.result_text, height=100)
-            st.subheader("Decryption")
-            st.code(st.session_state.result_textd)
+        if result_e:
+          st.subheader("Encryption")
+          st.code(result_e)
+        if result_d:
+          st.subheader("Decryption")
+          st.code(result_d) 
     # ---------------- File Tab ----------------
-    with tabs[1]:
+        st.markdown("---")
         st.markdown("<h3 style='color:#cc99ff;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
 
         uploaded_file = st.file_uploader("Upload a text file", type=["txt"])

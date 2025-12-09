@@ -147,9 +147,10 @@ def show_row_page():
 
     # ---------- Floating Circles ----------
     
-
+    st.markdown("<h4 style='text-align:center; color:#cc99ff;'>Encrypt/Decrypt Texts & Files</h4>", unsafe_allow_html=True)
+    st.markdown("---")
     # ------- #)
-    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Row Transposition Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
+    #st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">Row Transposition Encrypyion/ Decryption </h1>', unsafe_allow_html=True)
     st.markdown("<h3 style='color:#cc99ff;'> TEXT Encryption / Decryption</h3>", unsafe_allow_html=True)
     txt = st.text_input("Text", key="vig_text", 
                        help="Enter text containing only letters (other characters will be ignored)")
@@ -157,6 +158,8 @@ def show_row_page():
                        help="Enter key containing only letters")
 
     # ---------- Buttons ----------
+    dec_text=""
+    enc_text=""
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Encrypt", key="row_enc_btn", help="Click to encrypt text"):
@@ -164,9 +167,6 @@ def show_row_page():
                 st.error("Key must be numeric (digits only) and at least 2 digits long.")
             try:
                 enc_text = row_transposition_encrypt(txt, key)
-                if enc_text:
-                   st.subheader("Decryption")
-                   st.code( enc_text)
                 add_to_history("Row Transposition", "Encryption", txt, enc_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
@@ -174,13 +174,17 @@ def show_row_page():
         if st.button("Decrypt", key="row_dec_btn", help="Click to decrypt text"):
             try:
                 dec_text = row_transposition_decrypt(txt, key)
-                if dec_text:
-                   st.subheader("Decryption")
-                   st.code( dec_text)
                 add_to_history("Row Transposition", "Decryption", txt, dec_text)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
+    if dec_text:
+                   st.subheader("Decryption")
+                   st.code( dec_text)
+    if enc_text:
+                   st.subheader("Decryption")
+                   st.code( enc_text)
       # ---------- File Encryption / Decryption ----------
+    st.markdown("---")
     st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
 
 
