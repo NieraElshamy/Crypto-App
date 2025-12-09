@@ -170,13 +170,13 @@ FLASHCARDS_DATA = {
     "main_categories": [
         {
             "title": "Classical Ciphers",
-            "description": "",
+            "description": "Affine , DNA , Row transposition , Vigenere",
             "type": "main_category",
             "color": "#4a86e8"
         },
         {
             "title": "Modern Encryption",
-            "description": "",
+            "description": "AES , DES ",
             "type": "main_category",
             "color": "#6aa84f"
         }
@@ -307,6 +307,7 @@ if page == "Dashboard":
     
     # --- Modern Encryption Section ---
     st.markdown("<div class='section-header'>Modern Encryption</div>", unsafe_allow_html=True)
+    
     
     # إنشاء فلاش كارد صغيرة لل Modern Encryption
     modern_cols = st.columns(2)
