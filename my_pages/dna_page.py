@@ -51,100 +51,100 @@ def add_to_history(algo, action, input_text, output_text):
 # =========================
 
 def show_dna_page():
-    st.set_page_config(page_title="🧬 DNA Cipher", layout="wide")
-    st.markdown("<h1 style='text-align: center; color: #CF60CA;'>🧬 DNA Cipher Tool</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: #cc99ff;'>Encrypt/Decrypt Texts & Files (UTF-8 Supported)</h4>", unsafe_allow_html=True)
-    st.markdown("---")
-
-    tabs = st.tabs(["💬 Text Encryption", "📄 File Encryption"])
+    st.markdown('<h1 style="text-align:center; color:#CF60CA; font-weight:700; margin-bottom:25px;">DNA Encryption / Decryption</h1>', unsafe_allow_html=True)
     
-    # ---------------- Text Tab ----------------
-    with tabs[0]:
-        st.markdown("<h3 style='color:#cc99ff;'>Text Encryption / Decryption</h3>", unsafe_allow_html=True)
+    # Initialize state
+    for key in ["plain_text", "cipher_text", "result_encrypt", "result_decrypt"]:
+        if key not in st.session_state:
+            st.session_state[key] = ""
 
-        if "plain_text" not in st.session_state:
-            st.session_state.plain_text = ""
-        if "cipher_text" not in st.session_state:
-            st.session_state.cipher_text = ""
-        if "result_text" not in st.session_state:
-            st.session_state.result_text = ""
+    # ============= TEXT ENC/DEC =============
+    st.markdown("<h3 style='color:#cc99ff;'> TEXT Encryption / Decryption</h3>", unsafe_allow_html=True)
 
-        plain_text = st.text_area("Enter Plain Text", st.session_state.plain_text, height=120)
-        cipher_text = st.text_area("Enter Cipher Text", st.session_state.cipher_text, height=120)
-        key_text = st.text_input("Enter Key", type="default")
+    text_input = st.text_input("Plaintext / Cipher (DNA)")
+    key_input = st.text_input("Key")
 
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("Encrypt Text", use_container_width=True):
-                if plain_text and key_text:
-                    result = dna_encrypt(plain_text, key_text)
-                    st.session_state.result_texte = result
-                    st.session_state.cipher_text = result
-                    add_to_history("DNA", "Encryption", plain_text, result)
-                    st.success("✅ Text Encrypted Successfully!")
-                else:
-                    st.error("⚠ Please enter text and key.")
-        with col2:
-            if st.button("Decrypt Text", use_container_width=True):
-                if cipher_text and key_text:
-                    try:
-                        result = dna_decrypt(cipher_text, key_text)
-                        st.session_state.result_textd = result
-                        st.session_state.plain_text = result
-                        add_to_history("DNA", "Decryption", cipher_text, result)
-                        st.success("✅ Text Decrypted Successfully!")
-                    except Exception as e:
-                        st.error(f"❌ Failed to decrypt: {e}")
-                else:
-                    st.error("⚠ Please enter cipher text and key.")
-        if st.session_state.result_texte:
-            #st.text_area("Result Preview", st.session_state.result_text, height=100)
-            st.subheader("Encryption")
-            st.code(st.session_state.result_texte)
-        if st.session_state.result_textd:
-            #st.text_area("Result Preview", st.session_state.result_text, height=100)
-            st.subheader("Decryption")
-            st.code(st.session_state.result_textd)
-    # ---------------- File Tab ----------------
-    with tabs[1]:
-        st.markdown("<h3 style='color:#cc99ff;'>File Encryption / Decryption</h3>", unsafe_allow_html=True)
+    result_e = ""
+    result_d = ""
 
-        uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
-        file_key = st.text_input("File Key", key="file_key_tab2")
+    col1, col2 = st.columns(2)
 
-        if uploaded_file and file_key:
-            file_content = uploaded_file.read().decode("utf-8")
-            col3, col4 = st.columns([1,1])
-            with col3:
-                if st.button("Encrypt File"):
-                    cipher_file = dna_encrypt(file_content, file_key)
-                    add_to_history("DNA", "Encryption", file_content, cipher_file)
-                    st.success("✅ File Encrypted Successfully!")
+    # Encrypt
+    with col1:
+        if st.button("Encrypt Text"):
+            if not text_input or not key_input:
+                st.warning("⚠️ Please enter both text and key.")
+            else:
+                result_e = dna_encrypt(text_input.strip(), key_input.strip())
+                st.session_state.result_encrypt = result_e
+                add_to_history("DNA", "Encryption", text_input, result_e)
+
+    # Decrypt
+    with col2:
+        if st.button("Decrypt Text"):
+            if not text_input or not key_input:
+                st.warning("⚠️ Please enter both cipher and key.")
+            else:
+                try:
+                    result_d = dna_decrypt(text_input.strip(), key_input.strip())
+                    st.session_state.result_decrypt = result_d
+                    add_to_history("DNA", "Decryption", text_input, result_d)
+                except:
+                    st.error("❌ Failed to decrypt! Check key or cipher.")
+
+    # Show results
+    if st.session_state.result_encrypt:
+        st.subheader("Encryption")
+        st.code(st.session_state.result_encrypt)
+
+    if st.session_state.result_decrypt:
+        st.subheader("Decryption")
+        st.code(st.session_state.result_decrypt)
+
+    # ============= FILE ENC/DEC =============
+    st.markdown("<h3 style='color:#cc99ff;'> File Encryption / Decryption</h3>", unsafe_allow_html=True)
+
+    uploaded_file = st.file_uploader("Upload a text file", type=["txt"])
+    file_key = st.text_input("File Key", key="file_key_tab_DNA")
+
+    if uploaded_file and file_key:
+        file_content = uploaded_file.read().decode("utf-8")
+
+        col3, col4 = st.columns([1,1])
+
+        # Encrypt File
+        with col3:
+            if st.button("Encrypt File"):
+                cipher_file = dna_encrypt(file_content, file_key)
+                add_to_history("DNA", "Encryption", file_content, cipher_file)
+                st.success("✅ File Encrypted Successfully!")
+
+                st.download_button(
+                    "⬇ Download Encrypted File",
+                    cipher_file,
+                    file_name=f"{uploaded_file.name.replace('.txt','')}_encrypted.txt",
+                    mime="text/plain"
+                )
+                st.text_area("Encrypted File Preview", cipher_file, height=150)
+
+        # Decrypt File
+        with col4:
+            if st.button("Decrypt File"):
+                try:
+                    plain_file = dna_decrypt(file_content, file_key)
+                    add_to_history("DNA", "Decryption", file_content, plain_file)
+                    st.success("✅ File Decrypted Successfully!")
+
                     st.download_button(
-                        label="⬇ Download Encrypted File",
-                        data=cipher_file,
-                        file_name=f"{uploaded_file.name.replace('.txt','')}_encrypted.txt",
+                        "⬇ Download Decrypted File",
+                        plain_file,
+                        file_name=f"{uploaded_file.name.replace('.txt','')}_decrypted.txt",
                         mime="text/plain"
                     )
-                    st.text_area("Encrypted File Preview", cipher_file, height=150)
-            with col4:
-                if st.button("Decrypt File"):
-                    try:
-                        plain_file = dna_decrypt(file_content, file_key)
-                        add_to_history("DNA", "Decryption", file_content, plain_file)
-                        st.success("✅ File Decrypted Successfully!")
-                        st.download_button(
-                            label="⬇ Download Decrypted File",
-                            data=plain_file,
-                            file_name=f"{uploaded_file.name.replace('.txt','')}_decrypted.txt",
-                            mime="text/plain"
-                        )
-                        st.text_area("Decrypted File Preview", plain_file, height=150)
-                    except Exception as e:
-                        st.error(f"❌ Failed to decrypt: {e}")
-
-# =========================
-# Show DNA page directly
-# =========================
+                    st.text_area("Decrypted File Preview", plain_file, height=150)
+                except:
+                    st.error("❌ Failed to decrypt file!")
 
 
+# Run directly
+show_dna_page()
